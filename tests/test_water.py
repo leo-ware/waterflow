@@ -13,18 +13,6 @@ def test_init():
     assert foo.dem.tolist() == arr.tolist()
     assert np.all(foo.slope > 0)
 
-    assert foo.direction[1, 1, :, :].tolist() == [
-        [1, 0, 0],
-        [0, 0, 0],
-        [0, 0, 0]
-    ]
-
-    assert foo.direction[1, 0, :, :].tolist() == [
-        [0, 1, 0],
-        [0, 0, 0],
-        [0, 0, 0]
-    ]
-
 
 def test_errs():
     with raises(ValueError):
@@ -34,12 +22,42 @@ def test_errs():
         Water(np.array([[]]))
 
 
-def test_step():
-    arr = np.array([
+def test_flow_direction():
+    foo = Water([
         [1, 2],
         [3, 4]
     ])
-    foo = Water(arr)
+
+    assert foo.direction[0, 0].tolist() == [
+        [1/3, 1/3, 0],
+        [1/3, 0, 0],
+        [0, 0, 0]
+    ]
+
+    assert foo.direction[1, 0].tolist() == [
+        [0.5, 0.5, 0],
+        [0, 0, 0],
+        [0, 0, 0]
+    ]
+
+    assert foo.direction[0, 1].tolist() == [
+        [1 / 2, 0, 0],
+        [1 / 2, 0, 0],
+        [0, 0, 0]
+    ]
+
+    assert foo.direction[1, 1].tolist() == [
+        [1, 0, 0],
+        [0, 0, 0],
+        [0, 0, 0]
+    ]
+
+
+def test_step():
+    foo = Water([
+        [1, 2],
+        [3, 4]
+    ])
 
     assert foo.depth.tolist() == [[0, 0], [0, 0]]
     foo.step()
@@ -56,8 +74,10 @@ def test_step():
         [False, True]
     ]
 
+    print()
+    print(foo.depth)
     foo.step()
-    print(foo.depth > 0)
+    print(foo.depth)
     assert (foo.depth > 0).tolist() == [
         [True, False],
         [False, True]

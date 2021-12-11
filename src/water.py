@@ -3,10 +3,11 @@ import numpy as np
 
 class Water:
     def __init__(self, dem, source=None, manning=0.02):
-        if len(dem.shape) != 2 or not all(dem.shape):
+        self.dem = np.array(dem, dtype=float)
+
+        if len(self.dem.shape) != 2 or not all(self.dem.shape):
             raise ValueError("dem must be 2-dimensional")
 
-        self.dem = dem.astype(float)
         self.source = source if source else np.zeros_like(self.dem)
         self.manning = manning if type(manning) == np.ndarray else np.full_like(self.dem, manning)
 
@@ -16,7 +17,8 @@ class Water:
         self.volume_moving = self.calc_volume_moving()
 
     def calc_flow_direction(self):
-        padded_dem = np.pad(self.dem, 1, constant_values=np.inf)
+        # extend the dem with a border that is level with it
+        padded_dem = np.pad(self.dem, 1, mode="edge")
 
         neighbors = np.zeros(padded_dem.shape + (3, 3))
         for i in [0, 1, 2]:
