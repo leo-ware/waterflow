@@ -10,6 +10,8 @@ class Water:
         self.water_level = jnp.array(water_level) if water_level is not None else jnp.zeros_like(self.ground_level)
         self.chance_rain = jnp.array(chance_rain) if chance_rain is not None else jnp.zeros_like(self.ground_level)
 
+        self.t = 0
+
     # @jax.jit
     def gravity(self):
         """Calculates new water layout based on effects of gravity"""
@@ -30,5 +32,11 @@ class Water:
         rain = (np.random.random(self.chance_rain.shape) <= self.chance_rain).astype(int)
         return rain
 
+    @property
+    def total_height(self):
+        """total_height = ground_level + water_level"""
+        return self.water_level + self.ground_level
+
     def step(self):
+        self.t += 1
         self.water_level = self.gravity() + self.rainfall()
