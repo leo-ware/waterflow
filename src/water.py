@@ -43,7 +43,7 @@ class Water:
     # @jax.jit
     def gravity(self):
         """Calculates new water layout based on effects of gravity"""
-        # neighborhood grid of total height at each space
+        # neighbord grid of total height at each space
         neighbors = (get_neighbors(self.ground_level, pad_mode="edge") +
                      get_neighbors(self.water_level, pad_mode="zero"))
 
