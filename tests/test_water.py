@@ -29,3 +29,16 @@ def test_rainfall():
 
     foo = Water(ground_level=np.zeros(shape), chance_rain=np.full(shape, 0.8))
     assert 0 < np.sum(foo.rainfall()) < n_cells
+
+
+def test_step():
+    foo = Water(
+        ground_level=np.zeros((3, 3)),
+        water_level=[
+            [0, 0, 0],
+            [0, 1, 0],
+            [0, 0, 0]
+        ],
+        chance_rain=0.1*np.ones((3, 3))
+    )
+    foo.step()

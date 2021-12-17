@@ -32,17 +32,24 @@ def balance(arr):
 v_balance = jax.vmap(balance)
 
 
-def get_neighbors(grid):
+def get_neighbors(grid, pad_mode="edge"):
     """Takes nxn array and returns nxnx3x3 array, where each (i, j) is the moore neighborhood
 
     Args:
         grid: grid to calculate neighbors for
+        pad_mode: 'edge' or 'zero', what value to use for neighbors for spaces at the edge
 
     Returns:
         neighbors: each (i, j) in `neighbors` contains the moore neighborhood of the corresponding point
             (i, j) in `grid`
     """
-    grid = jnp.pad(grid, 1, mode="edge")
+    if pad_mode == "edge":
+        grid = jnp.pad(grid, 1, mode="edge")
+    elif pad_mode == "zero":
+        grid = jnp.pad(grid, 1, constant_values=1)
+    else:
+        raise ValueError("unknown value for parameter pad_edge")
+
     neighbors = jnp.zeros(grid.shape + (3, 3), dtype=float)
     for i in [0, 1, 2]:
         for j in [0, 1, 2]:
