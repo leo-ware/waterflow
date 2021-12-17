@@ -24,6 +24,9 @@ class Water:
         self.chance_rain = jnp.array(chance_rain) if chance_rain is not None else jnp.zeros_like(self.ground_level)
         self.water_saturation = jnp.zeros_like(self.ground_level)
 
+        if not self.ground_level.shape == self.water_level.shape == self.chance_rain.shape:
+            raise ValueError("All inputs must be the same shape")
+
         self.inundation_max = inundation_max
         self.inundation_rate = inundation_rate
         self.rain_amount = rain_amount
