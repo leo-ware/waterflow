@@ -10,6 +10,9 @@ def test_balance():
     assert balance(np.array([1, 0, 0])).tolist() == approx([0.5, 0.5])
     assert balance(np.array([1, 0])).tolist() == approx([1])
 
+    assert np.sum(balance(np.array([0] * 2))) == approx(0)
+    assert np.sum(balance(np.array([0] * 30))) == approx(0)
+
 
 def test_get_neighbors():
     neighbors = get_neighbors(np.array([
